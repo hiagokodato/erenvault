@@ -15,6 +15,9 @@ export const DashboardPage = lazy(() =>
 export const TransactionsPage = lazy(() =>
   import('@/pages/transactions/TransactionsPage').then((m) => ({ default: m.TransactionsPage })),
 )
+export const GoalsPage = lazy(() =>
+  import('@/pages/goals/GoalsPage').then((m) => ({ default: m.GoalsPage })),
+)
 export const NotFoundPage = lazy(() =>
   import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 )
