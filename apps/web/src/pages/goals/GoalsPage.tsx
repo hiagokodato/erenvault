@@ -1,7 +1,7 @@
 import { PageShell } from '@/components/layout/PageShell'
 import { GoalCard } from '@/features/goals/components/GoalCard'
 import { GoalForm } from '@/features/goals/components/GoalForm'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { useGoalMutations, useGoals } from '@/hooks/useGoals'
 
 export function GoalsPage() {

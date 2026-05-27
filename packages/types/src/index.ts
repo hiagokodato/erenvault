@@ -31,3 +31,15 @@ export type Goal = {
   deadline: string | null
   createdAt: string
 }
+
+/** Cartão de crédito (espelha `public.credit_cards`). */
+export type CreditCard = {
+  id: string
+  userId: string
+  name: string
+  limitCents: number
+  balanceCents: number
+  closingDay: number
+  dueDay: number
+  createdAt: string
+}

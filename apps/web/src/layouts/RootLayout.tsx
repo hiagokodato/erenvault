@@ -37,9 +37,7 @@ export function RootLayout() {
               <Suspense
                 fallback={
                   <div className="flex min-h-[50vh] items-center justify-center">
-                    <p className="animate-pulse font-display text-lg text-muted">
-                      Um momentinho…
-                    </p>
+                    <p className="animate-pulse font-display text-lg text-muted">Um momentinho…</p>
                   </div>
                 }
               >

@@ -72,7 +72,9 @@ export function GoalCard({ goal, isDeleting, isAdding, onAddSaved, onDelete }: G
           />
         </div>
         {complete && (
-          <p className="mt-2 text-xs font-medium text-primary">Meta alcançada — o Eren está orgulhoso!</p>
+          <p className="mt-2 text-xs font-medium text-primary">
+            Meta alcançada — o Eren está orgulhoso!
+          </p>
         )}
       </div>
 

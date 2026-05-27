@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { ErenMascot } from '@/components/brand/ErenMascot'
 import { PageShell } from '@/components/layout/PageShell'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 
 const features = [
   {
@@ -62,13 +62,13 @@ export function HomePage() {
         >
           <p className="label-caps">Finanças pessoais</p>
           <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-fg sm:text-5xl lg:text-[3.25rem]">
-            O cofre do{' '}
-            <span className="italic text-gradient-eren">Eren</span>
+            O cofre do <span className="italic text-gradient-eren">Eren</span>
             <br />
             para o seu dinheiro
           </h1>
           <p className="max-w-md text-base leading-relaxed text-muted">
-            Um lugar calmo para acompanhar gastos, metas e cartões. (O Eren nosso gatinho preto) te ajuda!
+            Um lugar calmo para acompanhar gastos, metas e cartões. (O Eren nosso gatinho preto) te
+            ajuda!
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <Link to={ctaTo}>
