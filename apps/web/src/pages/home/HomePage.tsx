@@ -68,8 +68,7 @@ export function HomePage() {
             para o seu dinheiro
           </h1>
           <p className="max-w-md text-base leading-relaxed text-muted">
-            Um lugar calmo para acompanhar gastos, metas e cartões. O Eren — nosso gatinho preto —
-            inspira este app feito com carinho para a família.
+            Um lugar calmo para acompanhar gastos, metas e cartões. (O Eren nosso gatinho preto) te ajuda!
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <Link to={ctaTo}>

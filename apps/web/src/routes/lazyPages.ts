@@ -12,6 +12,9 @@ export const RegisterPage = lazy(() =>
 export const DashboardPage = lazy(() =>
   import('@/pages/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })),
 )
+export const TransactionsPage = lazy(() =>
+  import('@/pages/transactions/TransactionsPage').then((m) => ({ default: m.TransactionsPage })),
+)
 export const NotFoundPage = lazy(() =>
   import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 )

@@ -11,7 +11,7 @@ Documento de referência para continuar o desenvolvimento no Cursor.
 | **Desenvolvedor** | Hiago Henrique Kodato |
 | **Objetivo** | Portfólio — SaaS de gestão financeira pessoal |
 | **Projeto** | ErenVault — homenagem ao gato preto **Eren** (tema noite + olhos âmbar) |
-| **Status** | **Fase 2 — Auth** (em andamento) · Fase 1 concluída |
+| **Status** | **Fase 3 — Transações** (em andamento) · Fases 1–2 concluídas |
 
 ---
 
@@ -90,9 +90,9 @@ Branch atual sugerida para foundation: `feature/project-foundation`
 | Fase | Conteúdo | Status |
 |------|----------|--------|
 | **1 — Foundation** | Monorepo, tema Eren, layout, landing, Supabase client, migration SQL | Concluída |
-| **2 — Auth** | Login, cadastro, sessão, rotas protegidas, perfil | Em andamento |
-| **3 — Dashboard** | Saldo, resumo do mês, gráficos | Iniciada (shell em `/dashboard`) |
-| **4 — Transações** | CRUD, categorias, filtros | Pendente |
+| **2 — Auth** | Login, cadastro, sessão, rotas protegidas, perfil | Concluída |
+| **3 — Transações** | CRUD, categorias padrão, resumo do mês | Em andamento |
+| **4 — Metas / cartões** | Metas, cartões de crédito | Pendente |
 | **5 — Metas e cartões** | Metas, cartões de crédito | Pendente |
 | **6 — CSV** | Importação de extratos | Pendente |
 | **7 — IA** | Insights financeiros | Pendente |
@@ -107,7 +107,8 @@ Branch atual sugerida para foundation: `feature/project-foundation`
 | `/` | `RootLayout` | Home (pública) |
 | `/login` | `AuthLayout` + `GuestRoute` | Login |
 | `/cadastro` | `AuthLayout` + `GuestRoute` | Cadastro |
-| `/dashboard` | `RootLayout` + `ProtectedRoute` | Painel (logado) |
+| `/dashboard` | `RootLayout` + `ProtectedRoute` | Painel com saldo real do mês |
+| `/transacoes` | `RootLayout` + `ProtectedRoute` | Lançamentos (CRUD) |
 | `*` | `RootLayout` | `NotFoundPage` |
 
 Erros: `RootErrorPage` via `errorElement`.

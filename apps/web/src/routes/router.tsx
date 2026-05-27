@@ -6,6 +6,7 @@ import { AuthLayout } from '@/layouts/AuthLayout'
 import { RootLayout } from '@/layouts/RootLayout'
 import {
   DashboardPage,
+  TransactionsPage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -34,7 +35,10 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <RootLayout />,
-            children: [{ path: '/dashboard', element: <DashboardPage /> }],
+            children: [
+              { path: '/dashboard', element: <DashboardPage /> },
+              { path: '/transacoes', element: <TransactionsPage /> },
+            ],
           },
         ],
       },

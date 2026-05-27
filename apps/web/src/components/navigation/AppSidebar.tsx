@@ -1,5 +1,5 @@
 import { Button } from '@erenvault/ui'
-import { Home, LayoutDashboard, LogIn, LogOut, MoonStar, Sun } from 'lucide-react'
+import { Home, LayoutDashboard, LogIn, LogOut, MoonStar, Receipt, Sun } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { ErenLogo } from '@/components/brand/ErenLogo'
@@ -15,6 +15,7 @@ export function AppSidebar() {
   const navItems = session
     ? [
         { to: '/dashboard', label: 'Painel', icon: LayoutDashboard, end: false },
+        { to: '/transacoes', label: 'Transações', icon: Receipt, end: false },
         { to: '/', label: 'Início', icon: Home, end: true },
       ]
     : [{ to: '/', label: 'Início', icon: Home, end: true }]
