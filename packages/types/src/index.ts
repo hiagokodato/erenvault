@@ -20,3 +20,14 @@ export type Transaction = {
   occurredOn: string
   createdAt: string
 }
+
+/** Meta de economia (espelha `public.goals`). */
+export type Goal = {
+  id: string
+  userId: string
+  title: string
+  targetAmountCents: number
+  savedAmountCents: number
+  deadline: string | null
+  createdAt: string
+}

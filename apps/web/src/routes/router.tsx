@@ -7,6 +7,7 @@ import { RootLayout } from '@/layouts/RootLayout'
 import {
   DashboardPage,
   TransactionsPage,
+  GoalsPage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
             children: [
               { path: '/dashboard', element: <DashboardPage /> },
               { path: '/transacoes', element: <TransactionsPage /> },
+              { path: '/metas', element: <GoalsPage /> },
             ],
           },
         ],

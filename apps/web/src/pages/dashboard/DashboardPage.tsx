@@ -1,9 +1,11 @@
 import { Button } from '@erenvault/ui'
-import { ArrowRight, Receipt, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
+import { ArrowRight, Receipt, Target, TrendingUp, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { PageShell } from '@/components/layout/PageShell'
+import { computeGoalsSummary, getGoalProgress } from '@/features/goals/api/goals'
 import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useGoals } from '@/hooks/useGoals'
 import { useProfile } from '@/hooks/useProfile'
 import { computeMonthlySummary, useMonthTransactions } from '@/hooks/useTransactions'
 import { formatCurrency, getCurrentMonthRange } from '@/utils/money'
@@ -12,9 +14,11 @@ export function DashboardPage() {
   const { user } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const { data: transactions = [], isLoading: txLoading } = useMonthTransactions()
+  const { data: goals = [], isLoading: goalsLoading } = useGoals()
   const { label: monthLabel } = getCurrentMonthRange()
 
   const summary = computeMonthlySummary(transactions)
+  const goalsSummary = computeGoalsSummary(goals)
 
   const displayName =
     profile?.displayName ??
@@ -23,6 +27,7 @@ export function DashboardPage() {
     'Amigo'
 
   const recent = transactions.slice(0, 5)
+  const topGoals = goals.slice(0, 3)
 
   return (
     <PageShell width="wide" className="space-y-8">
@@ -61,14 +66,52 @@ export function DashboardPage() {
 
         <div className="panel-inset flex flex-col justify-center p-5">
           <div className="flex items-center gap-2 text-muted">
-            <TrendingDown className="size-4" aria-hidden />
-            <p className="label-caps">Saídas</p>
+            <Target className="size-4" aria-hidden />
+            <p className="label-caps">Metas</p>
           </div>
           <p className="mt-2 font-display text-2xl font-semibold text-fg">
-            {txLoading ? '…' : formatCurrency(summary.expenseCents)}
+            {goalsLoading
+              ? '…'
+              : goalsSummary.total === 0
+                ? '—'
+                : `${goalsSummary.completed}/${goalsSummary.total}`}
           </p>
+          <p className="mt-0.5 text-xs text-muted">concluídas</p>
         </div>
       </div>
+
+      {topGoals.length > 0 && (
+        <section className="panel p-6">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-display text-lg font-semibold text-fg">Suas metas</h2>
+            <Link to="/metas">
+              <Button variant="ghost" size="sm" className="gap-2">
+                Ver todas
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+          </div>
+          <ul className="mt-4 space-y-4">
+            {topGoals.map((goal) => {
+              const progress = getGoalProgress(goal)
+              return (
+                <li key={goal.id}>
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium text-fg">{goal.title}</span>
+                    <span className="text-muted">{progress}%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/60">
+                    <div
+                      className="h-full rounded-full bg-primary/80"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )}
 
       <section className="panel p-6">
         <div className="flex items-center justify-between gap-4">
