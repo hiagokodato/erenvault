@@ -1,4 +1,4 @@
-import { Home, LayoutDashboard, LogIn, LogOut, Receipt } from 'lucide-react'
+import { Home, LayoutDashboard, LogIn, LogOut, Receipt, Target } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 import { useAuth } from '@/features/auth/context/AuthProvider'
@@ -10,6 +10,7 @@ export function AppBottomNav() {
     ? [
         { to: '/dashboard', label: 'Painel', icon: LayoutDashboard, end: false },
         { to: '/transacoes', label: 'Gastos', icon: Receipt, end: false },
+        { to: '/metas', label: 'Metas', icon: Target, end: false },
       ]
     : [
         { to: '/', label: 'Início', icon: Home, end: true },

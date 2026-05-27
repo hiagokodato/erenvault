@@ -77,6 +77,32 @@ export type Database = {
           occurred_on?: string
         }
       }
+      goals: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          target_amount_cents: number
+          saved_amount_cents: number
+          deadline: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          target_amount_cents: number
+          saved_amount_cents?: number
+          deadline?: string | null
+          created_at?: string
+        }
+        Update: {
+          title?: string
+          target_amount_cents?: number
+          saved_amount_cents?: number
+          deadline?: string | null
+        }
+      }
     }
   }
 }
