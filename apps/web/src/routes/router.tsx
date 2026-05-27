@@ -1,33 +1,48 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import { GuestRoute } from '@/components/auth/GuestRoute'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { RootLayout } from '@/layouts/RootLayout'
-import { HomePage, LoginPage, NotFoundPage, RootErrorPage } from '@/routes/lazyPages'
+import {
+  DashboardPage,
+  HomePage,
+  LoginPage,
+  NotFoundPage,
+  RegisterPage,
+  RootErrorPage,
+} from '@/routes/lazyPages'
 
 export const router = createBrowserRouter([
   {
     errorElement: <RootErrorPage />,
     children: [
       {
-        element: <AuthLayout />,
+        element: <GuestRoute />,
         children: [
           {
-            path: '/login',
-            element: <LoginPage />,
+            element: <AuthLayout />,
+            children: [
+              { path: '/login', element: <LoginPage /> },
+              { path: '/cadastro', element: <RegisterPage /> },
+            ],
+          },
+        ],
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            element: <RootLayout />,
+            children: [{ path: '/dashboard', element: <DashboardPage /> }],
           },
         ],
       },
       {
         element: <RootLayout />,
         children: [
-          {
-            path: '/',
-            element: <HomePage />,
-          },
-          {
-            path: '*',
-            element: <NotFoundPage />,
-          },
+          { path: '/', element: <HomePage /> },
+          { path: '*', element: <NotFoundPage /> },
         ],
       },
     ],

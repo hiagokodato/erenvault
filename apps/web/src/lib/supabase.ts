@@ -4,11 +4,16 @@ import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from '@/util
 
 let client: SupabaseClient | null = null
 
-/** Cliente Supabase singleton (só instancia se as env vars estiverem definidas). */
 export function getSupabase(): SupabaseClient | null {
   if (!isSupabaseConfigured()) return null
   if (!client) {
-    client = createClient(getSupabaseUrl(), getSupabaseAnonKey())
+    client = createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    })
   }
   return client
 }

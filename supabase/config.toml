@@ -1,0 +1,6 @@
+# Supabase CLI — https://supabase.com/docs/guides/cli
+project_id = "tvlwsugffijigzlxszmw"
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["https://*.vercel.app/**"]

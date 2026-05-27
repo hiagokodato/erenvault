@@ -11,7 +11,7 @@ Documento de referência para continuar o desenvolvimento no Cursor.
 | **Desenvolvedor** | Hiago Henrique Kodato |
 | **Objetivo** | Portfólio — SaaS de gestão financeira pessoal |
 | **Projeto** | ErenVault — homenagem ao gato preto **Eren** (tema noite + olhos âmbar) |
-| **Status** | **Fase 1 — Foundation** (em andamento) |
+| **Status** | **Fase 2 — Auth** (em andamento) · Fase 1 concluída |
 
 ---
 
@@ -89,9 +89,9 @@ Branch atual sugerida para foundation: `feature/project-foundation`
 
 | Fase | Conteúdo | Status |
 |------|----------|--------|
-| **1 — Foundation** | Monorepo, tema Eren, layout, landing, Supabase client, migration SQL | Em andamento |
-| **2 — Auth** | Supabase Auth (email), rotas protegidas, perfil | Pendente |
-| **3 — Dashboard** | Saldo, resumo do mês, gráficos | Pendente |
+| **1 — Foundation** | Monorepo, tema Eren, layout, landing, Supabase client, migration SQL | Concluída |
+| **2 — Auth** | Login, cadastro, sessão, rotas protegidas, perfil | Em andamento |
+| **3 — Dashboard** | Saldo, resumo do mês, gráficos | Iniciada (shell em `/dashboard`) |
 | **4 — Transações** | CRUD, categorias, filtros | Pendente |
 | **5 — Metas e cartões** | Metas, cartões de crédito | Pendente |
 | **6 — CSV** | Importação de extratos | Pendente |
@@ -104,8 +104,10 @@ Branch atual sugerida para foundation: `feature/project-foundation`
 
 | Rota | Layout | Página |
 |------|--------|--------|
-| `/` | `RootLayout` (sidebar) | Home |
-| `/login` | `AuthLayout` (tela cheia, split) | Login placeholder |
+| `/` | `RootLayout` | Home (pública) |
+| `/login` | `AuthLayout` + `GuestRoute` | Login |
+| `/cadastro` | `AuthLayout` + `GuestRoute` | Cadastro |
+| `/dashboard` | `RootLayout` + `ProtectedRoute` | Painel (logado) |
 | `*` | `RootLayout` | `NotFoundPage` |
 
 Erros: `RootErrorPage` via `errorElement`.
@@ -165,7 +167,7 @@ Aplicar no SQL Editor do Supabase ou via CLI quando configurado.
 ```
 app/           App.tsx, AppProviders
 components/    brand/, layout/, navigation/
-features/      (criar por domínio nas próximas fases)
+features/      auth/context (AuthProvider)
 hooks/         useThemeMode, …
 layouts/       RootLayout, AuthLayout
 pages/         home, auth, errors
