@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { ErenMascot } from '@/components/brand/ErenMascot'
 import { PageShell } from '@/components/layout/PageShell'
+import { useAuth } from '@/features/auth/context/AuthProvider'
 
 const features = [
   {
@@ -46,6 +47,10 @@ const bentoStats = [
 ] as const
 
 export function HomePage() {
+  const { session } = useAuth()
+  const ctaTo = session ? '/dashboard' : '/login'
+  const ctaLabel = session ? 'Ir para o painel' : 'Entrar no cofre'
+
   return (
     <PageShell width="wide" className="space-y-14 lg:space-y-20">
       <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
@@ -63,15 +68,24 @@ export function HomePage() {
             para o seu dinheiro
           </h1>
           <p className="max-w-md text-base leading-relaxed text-muted">
-            Um lugar calmo para acompanhar gastos, metas e cartões. O Eren — nosso gatinho preto —
-            inspira este app feito com carinho para a família.
+            Um lugar calmo para acompanhar gastos, metas e cartões. (O Eren nosso gatinho preto) te ajuda!
           </p>
-          <Link to="/login">
-            <Button variant="primary" size="lg" className="gap-2 rounded-lg">
-              Entrar no cofre
-              <ArrowRight className="size-4" />
-            </Button>
-          </Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to={ctaTo}>
+              <Button variant="primary" size="lg" className="gap-2 rounded-lg">
+                {ctaLabel}
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            {!session && (
+              <Link
+                to="/cadastro"
+                className="text-sm font-medium text-muted underline-offset-4 hover:text-fg hover:underline"
+              >
+                Criar conta
+              </Link>
+            )}
+          </div>
         </motion.div>
 
         <motion.div
@@ -145,9 +159,9 @@ export function HomePage() {
             Abra seu cofre e organize suas finanças com o Eren
           </p>
         </div>
-        <Link to="/login">
+        <Link to={ctaTo}>
           <Button variant="primary" className="shrink-0 gap-2 rounded-lg">
-            Entrar
+            {session ? 'Abrir painel' : 'Criar ou entrar'}
             <ArrowRight className="size-4" />
           </Button>
         </Link>
