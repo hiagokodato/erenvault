@@ -13,9 +13,7 @@ export function AuthLayout() {
       </a>
       <Suspense
         fallback={
-          <div className="flex min-h-dvh items-center justify-center text-muted">
-            Carregando…
-          </div>
+          <div className="flex min-h-dvh items-center justify-center text-muted">Carregando…</div>
         }
       >
         <main id="main">

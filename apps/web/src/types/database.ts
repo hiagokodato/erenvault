@@ -103,6 +103,35 @@ export type Database = {
           deadline?: string | null
         }
       }
+      credit_cards: {
+        Row: {
+          id: string
+          user_id: string
+          name: string
+          limit_cents: number
+          balance_cents: number
+          closing_day: number
+          due_day: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          name: string
+          limit_cents: number
+          balance_cents?: number
+          closing_day: number
+          due_day: number
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          limit_cents?: number
+          balance_cents?: number
+          closing_day?: number
+          due_day?: number
+        }
+      }
     }
   }
 }

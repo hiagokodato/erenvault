@@ -75,3 +75,55 @@ export async function deleteTransaction(id: string): Promise<void> {
   const { error } = await supabase.from('transactions').delete().eq('id', id)
   if (error) throw error
 }
+
+export async function fetchRecentTransactions(userId: string, limit = 200): Promise<Transaction[]> {
+  const supabase = getSupabase()
+  if (!supabase) return []
+
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('*')
+    .eq('user_id', userId)
+    .order('occurred_on', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) throw error
+  return (data ?? []).map((row) => mapTransaction(row as TransactionRow))
+}
+
+export async function createTransactionsBulk(inputs: CreateTransactionInput[]): Promise<number> {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase não configurado')
+  if (inputs.length === 0) return 0
+
+  const rows = inputs.map((input) => ({
+    user_id: input.userId,
+    type: input.type,
+    amount_cents: input.amountCents,
+    description: input.description,
+    category_id: input.categoryId,
+    occurred_on: input.occurredOn,
+  }))
+
+  const { error } = await supabase.from('transactions').insert(rows)
+  if (error) throw error
+  return inputs.length
+}
+
+export function computeMonthlySummary(transactions: { type: string; amountCents: number }[]) {
+  let incomeCents = 0
+  let expenseCents = 0
+
+  for (const t of transactions) {
+    if (t.type === 'income') incomeCents += t.amountCents
+    else expenseCents += t.amountCents
+  }
+
+  return {
+    incomeCents,
+    expenseCents,
+    balanceCents: incomeCents - expenseCents,
+    count: transactions.length,
+  }
+}

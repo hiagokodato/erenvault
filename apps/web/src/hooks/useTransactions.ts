@@ -2,12 +2,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   createTransaction,
+  createTransactionsBulk,
   deleteTransaction,
+  fetchRecentTransactions,
   fetchTransactionsForMonth,
+  computeMonthlySummary,
   type CreateTransactionInput,
 } from '@/features/transactions/api/transactions'
+import type { ParsedCsvRow } from '@/features/csv-import/types'
 import { transactionKeys } from '@/features/transactions/queryKeys'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { getCurrentMonthRange } from '@/utils/money'
 
 export function useMonthTransactions() {
@@ -23,12 +27,26 @@ export function useMonthTransactions() {
   return { ...query, from, to, monthLabel: label }
 }
 
+export function useRecentTransactions() {
+  const { user } = useAuth()
+  const { label } = getCurrentMonthRange()
+
+  const query = useQuery({
+    queryKey: transactionKeys.recent(),
+    enabled: Boolean(user?.id),
+    queryFn: () => fetchRecentTransactions(user!.id),
+  })
+
+  return { ...query, monthLabel: label }
+}
+
 export function useTransactionMutations(userId: string | undefined) {
   const queryClient = useQueryClient()
   const { from, to } = getCurrentMonthRange()
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: transactionKeys.month(from, to) })
+    queryClient.invalidateQueries({ queryKey: transactionKeys.recent() })
   }
 
   const create = useMutation({
@@ -44,22 +62,23 @@ export function useTransactionMutations(userId: string | undefined) {
     onSuccess: invalidate,
   })
 
-  return { create, remove }
+  const importCsv = useMutation({
+    mutationFn: (rows: ParsedCsvRow[]) => {
+      if (!userId) throw new Error('Usuário não autenticado')
+      const inputs: CreateTransactionInput[] = rows.map((row) => ({
+        userId,
+        type: row.type,
+        amountCents: row.amountCents,
+        description: row.description,
+        categoryId: null,
+        occurredOn: row.occurredOn,
+      }))
+      return createTransactionsBulk(inputs)
+    },
+    onSuccess: invalidate,
+  })
+
+  return { create, remove, importCsv }
 }
 
-export function computeMonthlySummary(transactions: { type: string; amountCents: number }[]) {
-  let incomeCents = 0
-  let expenseCents = 0
-
-  for (const t of transactions) {
-    if (t.type === 'income') incomeCents += t.amountCents
-    else expenseCents += t.amountCents
-  }
-
-  return {
-    incomeCents,
-    expenseCents,
-    balanceCents: incomeCents - expenseCents,
-    count: transactions.length,
-  }
-}
+export { computeMonthlySummary }

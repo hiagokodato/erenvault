@@ -1,10 +1,14 @@
 import { Button } from '@erenvault/ui'
-import { ArrowRight, Receipt, Target, TrendingUp, Wallet } from 'lucide-react'
+import { ArrowRight, CreditCard, Receipt, Sparkles, Target, TrendingUp, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { PageShell } from '@/components/layout/PageShell'
+import { InsightCard } from '@/features/insights/components/InsightCard'
+import { computeCardsSummary, getCardUsagePercent } from '@/features/credit-cards/api/creditCards'
 import { computeGoalsSummary, getGoalProgress } from '@/features/goals/api/goals'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
+import { useCreditCards } from '@/hooks/useCreditCards'
+import { useFinancialInsights } from '@/hooks/useFinancialInsights'
 import { useGoals } from '@/hooks/useGoals'
 import { useProfile } from '@/hooks/useProfile'
 import { computeMonthlySummary, useMonthTransactions } from '@/hooks/useTransactions'
@@ -15,10 +19,13 @@ export function DashboardPage() {
   const { data: profile, isLoading: profileLoading } = useProfile()
   const { data: transactions = [], isLoading: txLoading } = useMonthTransactions()
   const { data: goals = [], isLoading: goalsLoading } = useGoals()
+  const { data: cards = [], isLoading: cardsLoading } = useCreditCards()
+  const { insights, isLoading: insightsLoading } = useFinancialInsights()
   const { label: monthLabel } = getCurrentMonthRange()
 
   const summary = computeMonthlySummary(transactions)
   const goalsSummary = computeGoalsSummary(goals)
+  const cardsSummary = computeCardsSummary(cards)
 
   const displayName =
     profile?.displayName ??
@@ -28,6 +35,8 @@ export function DashboardPage() {
 
   const recent = transactions.slice(0, 5)
   const topGoals = goals.slice(0, 3)
+  const topCards = cards.slice(0, 3)
+  const topInsights = insights.slice(0, 2)
 
   return (
     <PageShell width="wide" className="space-y-8">
@@ -38,6 +47,32 @@ export function DashboardPage() {
         </h1>
         <p className="mt-2 text-sm capitalize text-muted">Resumo de {monthLabel}</p>
       </header>
+
+      {(insightsLoading || topInsights.length > 0) && (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="size-5 text-primary" aria-hidden />
+              <h2 className="font-display text-lg font-semibold text-fg">Conselhos do Eren</h2>
+            </div>
+            <Link to="/insights">
+              <Button variant="ghost" size="sm" className="gap-2">
+                Ver todos
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+          </div>
+          {insightsLoading ? (
+            <p className="text-sm text-muted">Analisando…</p>
+          ) : (
+            <ul className="space-y-3">
+              {topInsights.map((insight) => (
+                <InsightCard key={insight.id} insight={insight} />
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="panel p-5 sm:col-span-2">
@@ -79,6 +114,47 @@ export function DashboardPage() {
           <p className="mt-0.5 text-xs text-muted">concluídas</p>
         </div>
       </div>
+
+      {cards.length > 0 && (
+        <section className="panel p-6">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-display text-lg font-semibold text-fg">Cartões</h2>
+            <Link to="/cartoes">
+              <Button variant="ghost" size="sm" className="gap-2">
+                Ver todos
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-2 text-sm text-muted">
+            {cardsLoading
+              ? '…'
+              : `${formatCurrency(cardsSummary.totalUsedCents)} usados de ${formatCurrency(cardsSummary.totalLimitCents)}`}
+          </p>
+          <ul className="mt-4 space-y-4">
+            {topCards.map((card) => {
+              const usage = getCardUsagePercent(card)
+              return (
+                <li key={card.id}>
+                  <div className="flex items-center justify-between gap-2 text-sm">
+                    <span className="flex items-center gap-2 font-medium text-fg">
+                      <CreditCard className="size-4 text-muted" aria-hidden />
+                      {card.name}
+                    </span>
+                    <span className="text-muted">{usage}%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/60">
+                    <div
+                      className="h-full rounded-full bg-primary/80"
+                      style={{ width: `${usage}%` }}
+                    />
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )}
 
       {topGoals.length > 0 && (
         <section className="panel p-6">
