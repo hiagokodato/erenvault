@@ -4,7 +4,7 @@ import { type FormEvent, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { AuthBrandPanel } from '@/components/auth/AuthBrandPanel'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { mapAuthError } from '@/lib/auth-errors'
 
 export function LoginPage() {

@@ -1,29 +1,36 @@
 import { PageShell } from '@/components/layout/PageShell'
+import { CsvImportPanel } from '@/features/csv-import/components/CsvImportPanel'
 import { TransactionForm } from '@/features/transactions/components/TransactionForm'
 import { TransactionList } from '@/features/transactions/components/TransactionList'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { Skeleton } from '@/components/skeleton/Skeleton'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { useCategories } from '@/hooks/useCategories'
 import {
   computeMonthlySummary,
-  useMonthTransactions,
+  useRecentTransactions,
   useTransactionMutations,
 } from '@/hooks/useTransactions'
-import { formatCurrency } from '@/utils/money'
+import { formatCurrency, getCurrentMonthRange } from '@/utils/money'
 
 export function TransactionsPage() {
   const { user } = useAuth()
   const { data: categories = [], isLoading: categoriesLoading } = useCategories()
-  const { data: transactions = [], isLoading, monthLabel } = useMonthTransactions()
-  const { create, remove } = useTransactionMutations(user?.id)
+  const { data: transactions = [], isLoading, monthLabel } = useRecentTransactions()
+  const { create, remove, importCsv } = useTransactionMutations(user?.id)
 
-  const summary = computeMonthlySummary(transactions)
+  const { from, to } = getCurrentMonthRange()
+  const monthTransactions = transactions.filter((t) => t.occurredOn >= from && t.occurredOn <= to)
+  const summary = computeMonthlySummary(monthTransactions)
 
   return (
     <PageShell width="wide" className="space-y-8">
       <header>
         <p className="label-caps">Lançamentos</p>
         <h1 className="font-display text-3xl font-semibold text-fg">Transações</h1>
-        <p className="mt-2 text-sm capitalize text-muted">{monthLabel}</p>
+        <p className="mt-2 text-sm text-muted">
+          Resumo de <span className="capitalize">{monthLabel}</span> · lista com lançamentos
+          recentes
+        </p>
       </header>
 
       <div className="grid gap-3 sm:grid-cols-3">
@@ -53,8 +60,23 @@ export function TransactionsPage() {
         onSubmit={(data) => create.mutate(data)}
       />
 
+      <CsvImportPanel
+        isImporting={importCsv.isPending}
+        onImport={(rows) => importCsv.mutate(rows)}
+      />
+
       {isLoading ? (
-        <p className="text-center text-sm text-muted">Carregando lançamentos…</p>
+        <ul className="space-y-3" aria-label="Carregando lançamentos">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <li key={i} className="panel p-5">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-5/12" />
+              </div>
+            </li>
+          ))}
+        </ul>
       ) : (
         <TransactionList
           transactions={transactions}

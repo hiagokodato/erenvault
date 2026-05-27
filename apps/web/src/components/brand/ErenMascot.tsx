@@ -16,7 +16,11 @@ export function ErenMascot({ className = '' }: { className?: string }) {
         strokeWidth="1.5"
       />
       <path d="M55 38 L48 18 L62 32 Z" fill="rgb(var(--card))" stroke="rgb(var(--primary) / 0.4)" />
-      <path d="M145 38 L152 18 L138 32 Z" fill="rgb(var(--card))" stroke="rgb(var(--primary) / 0.4)" />
+      <path
+        d="M145 38 L152 18 L138 32 Z"
+        fill="rgb(var(--card))"
+        stroke="rgb(var(--primary) / 0.4)"
+      />
       <circle cx="82" cy="72" r="5" fill="rgb(var(--primary))" />
       <circle cx="118" cy="72" r="5" fill="rgb(var(--primary))" />
       <circle cx="84" cy="70" r="1.5" fill="rgb(var(--bg))" />

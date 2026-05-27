@@ -18,6 +18,12 @@ export const TransactionsPage = lazy(() =>
 export const GoalsPage = lazy(() =>
   import('@/pages/goals/GoalsPage').then((m) => ({ default: m.GoalsPage })),
 )
+export const CreditCardsPage = lazy(() =>
+  import('@/pages/credit-cards/CreditCardsPage').then((m) => ({ default: m.CreditCardsPage })),
+)
+export const InsightsPage = lazy(() =>
+  import('@/pages/insights/InsightsPage').then((m) => ({ default: m.InsightsPage })),
+)
 export const NotFoundPage = lazy(() =>
   import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 )

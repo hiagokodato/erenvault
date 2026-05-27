@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { getSupabase } from '@/lib/supabase'
 import type { UserProfile } from '@erenvault/types'
 import type { Database } from '@/types/database'

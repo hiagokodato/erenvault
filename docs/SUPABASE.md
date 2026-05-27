@@ -16,7 +16,8 @@ Na **Vercel**: Settings → Environment Variables → mesmas chaves → Redeploy
 No painel Supabase → **SQL Editor** → executar:
 
 `supabase/migrations/20250526000000_initial.sql`  
-`supabase/migrations/20250526100000_goals.sql` (metas — Fase 4)
+`supabase/migrations/20250526100000_goals.sql` (metas — Fase 4)  
+`supabase/migrations/20250526200000_credit_cards.sql` (cartões — Fase 5)
 
 ## 3. Autenticação (família)
 

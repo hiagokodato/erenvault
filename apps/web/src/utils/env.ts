@@ -14,8 +14,7 @@ export function getSupabaseUrl(): string {
 
 /** Publishable (sb_publishable_...) ou Legacy anon (eyJ...). */
 export function getSupabaseAnonKey(): string {
-  const key =
-    readEnv('VITE_SUPABASE_ANON_KEY') ?? readEnv('VITE_SUPABASE_PUBLISHABLE_KEY')
+  const key = readEnv('VITE_SUPABASE_ANON_KEY') ?? readEnv('VITE_SUPABASE_PUBLISHABLE_KEY')
   if (!key) {
     throw new Error('Missing VITE_SUPABASE_ANON_KEY')
   }

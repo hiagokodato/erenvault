@@ -1,9 +1,20 @@
 import { Button } from '@erenvault/ui'
-import { Home, LayoutDashboard, LogIn, LogOut, MoonStar, Receipt, Sun, Target } from 'lucide-react'
+import {
+  CreditCard,
+  Home,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  MoonStar,
+  Receipt,
+  Sparkles,
+  Sun,
+  Target,
+} from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { ErenLogo } from '@/components/brand/ErenLogo'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { useThemeMode } from '@/hooks/useThemeMode'
 import { useThemeStore } from '@/stores/themeStore'
 
@@ -17,6 +28,8 @@ export function AppSidebar() {
         { to: '/dashboard', label: 'Painel', icon: LayoutDashboard, end: false },
         { to: '/transacoes', label: 'Transações', icon: Receipt, end: false },
         { to: '/metas', label: 'Metas', icon: Target, end: false },
+        { to: '/cartoes', label: 'Cartões', icon: CreditCard, end: false },
+        { to: '/insights', label: 'Insights', icon: Sparkles, end: false },
         { to: '/', label: 'Início', icon: Home, end: true },
       ]
     : [{ to: '/', label: 'Início', icon: Home, end: true }]

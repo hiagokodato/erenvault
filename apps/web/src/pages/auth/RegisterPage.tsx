@@ -4,7 +4,7 @@ import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { AuthBrandPanel } from '@/components/auth/AuthBrandPanel'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 import { mapAuthError } from '@/lib/auth-errors'
 
 export function RegisterPage() {
@@ -50,7 +50,9 @@ export function RegisterPage() {
     }
 
     if (needsEmailConfirmation) {
-      setSuccess('Enviamos um link de confirmação para o seu e-mail. Depois de confirmar, você já pode entrar.')
+      setSuccess(
+        'Enviamos um link de confirmação para o seu e-mail. Depois de confirmar, você já pode entrar.',
+      )
       return
     }
 
@@ -75,9 +77,7 @@ export function RegisterPage() {
 
         <div className="mx-auto w-full max-w-sm">
           <p className="label-caps lg:hidden">Cadastro</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold text-fg lg:mt-0">
-            Criar conta
-          </h2>
+          <h2 className="mt-2 font-display text-2xl font-semibold text-fg lg:mt-0">Criar conta</h2>
           <p className="mt-2 text-sm text-muted">Preencha seus dados para começar.</p>
 
           {!isConfigured && (

@@ -8,7 +8,7 @@ import {
   type CreateGoalInput,
 } from '@/features/goals/api/goals'
 import { goalKeys } from '@/features/goals/queryKeys'
-import { useAuth } from '@/features/auth/context/AuthProvider'
+import { useAuth } from '@/features/auth/context/useAuth'
 
 export function useGoals() {
   const { user } = useAuth()
@@ -34,7 +34,8 @@ export function useGoalMutations(userId: string | undefined) {
   })
 
   const addSaved = useMutation({
-    mutationFn: ({ id, addCents }: { id: string; addCents: number }) => addToGoalSaved(id, addCents),
+    mutationFn: ({ id, addCents }: { id: string; addCents: number }) =>
+      addToGoalSaved(id, addCents),
     onSuccess: invalidate,
   })
 
