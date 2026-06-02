@@ -46,9 +46,6 @@ Veja [`docs/CSV_IMPORT.md`](./docs/CSV_IMPORT.md) para o formato aceito.
 
 Veja [`docs/INSIGHTS.md`](./docs/INSIGHTS.md) — análise local em `/insights`.
 
-## Documentação para o Cursor
-
-Arquivo local `CONTEXTO_CURSOR_ERENVAULT.md` (não versionado) — roadmap e convenções.
 
 ## Licença
 
