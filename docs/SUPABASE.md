@@ -16,8 +16,11 @@ Na **Vercel**: Settings → Environment Variables → mesmas chaves → Redeploy
 No painel Supabase → **SQL Editor** → executar:
 
 `supabase/migrations/20250526000000_initial.sql`  
-`supabase/migrations/20250526100000_goals.sql` (metas — Fase 4)  
-`supabase/migrations/20250526200000_credit_cards.sql` (cartões — Fase 5)
+`supabase/migrations/20250526100000_goals.sql` (metas)  
+`supabase/migrations/20250526200000_credit_cards.sql` (cartões)  
+`supabase/migrations/20250526300000_categories_unique.sql` (índice único em categorias)
+
+Se já existirem categorias duplicadas, deduplique antes de rodar a última migration.
 
 ## 3. Autenticação (família)
 

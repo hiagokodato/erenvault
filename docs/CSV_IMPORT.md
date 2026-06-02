@@ -28,3 +28,5 @@ Data;Descrição;Valor
 ## Onde importar
 
 **Transações** → seção **Importar CSV** → escolher arquivo → conferir prévia → importar.
+
+Arquivo de exemplo no repositório: [`docs/samples/extrato_exemplo.csv`](./samples/extrato_exemplo.csv)

@@ -1,3 +1,4 @@
+import { LoadingPanel } from '@/components/skeleton/LoadingPanel'
 import { PageShell } from '@/components/layout/PageShell'
 import { GoalCard } from '@/features/goals/components/GoalCard'
 import { GoalForm } from '@/features/goals/components/GoalForm'
@@ -22,7 +23,7 @@ export function GoalsPage() {
       <GoalForm isSubmitting={create.isPending} onSubmit={(data) => create.mutate(data)} />
 
       {isLoading ? (
-        <p className="text-center text-sm text-muted">Carregando metas…</p>
+        <LoadingPanel rows={2} label="Carregando metas" />
       ) : goals.length === 0 ? (
         <div className="panel p-8 text-center">
           <p className="text-sm text-muted">Você ainda não tem metas. Crie a primeira acima.</p>

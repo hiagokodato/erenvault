@@ -20,6 +20,18 @@ export function mapAuthError(message: string): string {
   if (lower.includes('rate limit')) {
     return 'Muitas tentativas. Aguarde um momento e tente de novo.'
   }
+  if (lower.includes('invalid email') || lower.includes('unable to validate email')) {
+    return 'E-mail inválido. Confira o endereço e tente novamente.'
+  }
+  if (lower.includes('redirect') || lower.includes('redirect_to')) {
+    return 'URL de redirecionamento não permitida. Ajuste as Redirect URLs no Supabase.'
+  }
+  if (lower.includes('password') && (lower.includes('weak') || lower.includes('short'))) {
+    return 'Senha fraca. Use pelo menos 6 caracteres e evite sequências simples.'
+  }
+  if (lower.includes('user not found')) {
+    return 'Usuário não encontrado. Verifique o e-mail ou crie uma conta.'
+  }
 
   return 'Não foi possível concluir. Verifique os dados e tente novamente.'
 }
