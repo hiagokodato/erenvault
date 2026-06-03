@@ -30,7 +30,7 @@ Plataforma SaaS de **gestão financeira pessoal**, em homenagem ao gato preto **
 | Pacote | Descrição |
 |--------|-----------|
 | `apps/web` | Aplicação React |
-| `apps/api` | Reservado (NestJS / LLM futuro) |
+| `apps/api` | NestJS — auth Supabase, insights LLM (`npm run dev:api`) |
 | `packages/ui` | Componentes compartilhados |
 | `packages/types` | Tipos TypeScript |
 
@@ -41,6 +41,10 @@ npm install
 cp apps/web/.env.example apps/web/.env.local
 # Preencher VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
 npm run dev
+
+# API (opcional, outro terminal)
+cp apps/api/.env.example apps/api/.env
+npm run dev:api
 ```
 
 Acesse [http://localhost:5173](http://localhost:5173).
@@ -51,7 +55,7 @@ Acesse [http://localhost:5173](http://localhost:5173).
 2. Execute as migrations em `supabase/migrations/` **na ordem do nome do arquivo**.
 3. Copie URL e anon key para `.env.local` e para a Vercel.
 
-Detalhes: [`docs/SUPABASE.md`](./docs/SUPABASE.md)
+Detalhes: [`docs/SUPABASE.md`](./docs/SUPABASE.md) · API: [`docs/API.md`](./docs/API.md)
 
 ## Importar extrato (CSV)
 
