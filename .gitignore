@@ -36,8 +36,6 @@ vite.config.ts.timestamp-*
 .DS_Store
 Thumbs.db
 
-# Cursor — contexto local (não versionar)
-CONTEXTO_CURSOR_ERENVAULT.md
 
 # Editors
 .vscode/*
