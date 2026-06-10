@@ -1,7 +1,17 @@
 import { Button } from '@erenvault/ui'
-import { ArrowRight, CreditCard, Receipt, Sparkles, Target, TrendingUp, Wallet } from 'lucide-react'
+import {
+  ArrowRight,
+  CreditCard,
+  PieChart,
+  Receipt,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Wallet,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+import { SkeletonLine } from '@/components/skeleton/Skeleton'
 import { PageShell } from '@/components/layout/PageShell'
 import { InsightCard } from '@/features/insights/components/InsightCard'
 import { computeCardsSummary, getCardUsagePercent } from '@/features/credit-cards/api/creditCards'
@@ -115,6 +125,24 @@ export function DashboardPage() {
         </div>
       </div>
 
+      <section className="panel flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 items-center justify-center rounded-lg bg-accent/15 text-accent">
+            <PieChart className="size-5" aria-hidden />
+          </span>
+          <div>
+            <h2 className="font-display text-lg font-semibold text-fg">Relatórios</h2>
+            <p className="text-sm text-muted">Gastos e entradas por categoria neste mês.</p>
+          </div>
+        </div>
+        <Link to="/relatorios">
+          <Button variant="primary" size="sm" className="gap-2 rounded-lg">
+            Ver relatórios
+            <ArrowRight className="size-4" />
+          </Button>
+        </Link>
+      </section>
+
       {cards.length > 0 && (
         <section className="panel p-6">
           <div className="flex items-center justify-between gap-4">
@@ -201,7 +229,14 @@ export function DashboardPage() {
         </div>
 
         {txLoading ? (
-          <p className="mt-6 text-sm text-muted">Carregando…</p>
+          <ul className="mt-4 space-y-3" aria-label="Carregando lançamentos" aria-busy="true">
+            {[0, 1, 2].map((i) => (
+              <li key={i} className="flex justify-between gap-4 py-2">
+                <SkeletonLine className="w-1/2" />
+                <SkeletonLine className="w-16" />
+              </li>
+            ))}
+          </ul>
         ) : recent.length === 0 ? (
           <div className="mt-6 text-center">
             <Receipt className="mx-auto size-10 text-muted/50" aria-hidden />

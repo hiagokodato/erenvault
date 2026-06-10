@@ -8,8 +8,12 @@
   ],
   "scripts": {
     "dev": "npm run dev -w @erenvault/web",
+    "dev:api": "npm run dev -w @erenvault/api",
     "build": "npm run build -w @erenvault/web",
+    "build:api": "npm run build -w @erenvault/api",
+    "build:all": "npm run build && npm run build:api",
     "lint": "npm run lint -w @erenvault/web",
+    "lint:api": "npm run lint -w @erenvault/api",
     "format": "prettier . --write"
   },
   "devDependencies": {

@@ -21,6 +21,14 @@ export function getSupabaseAnonKey(): string {
   return key
 }
 
+export function getApiUrl(): string | undefined {
+  return readEnv('VITE_API_URL')
+}
+
+export function isApiConfigured(): boolean {
+  return Boolean(getApiUrl())
+}
+
 export function isSupabaseConfigured(): boolean {
   try {
     getSupabaseUrl()

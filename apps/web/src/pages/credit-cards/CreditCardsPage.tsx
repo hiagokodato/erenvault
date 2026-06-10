@@ -1,3 +1,4 @@
+import { LoadingPanel } from '@/components/skeleton/LoadingPanel'
 import { PageShell } from '@/components/layout/PageShell'
 import { CreditCardForm } from '@/features/credit-cards/components/CreditCardForm'
 import { CreditCardItem } from '@/features/credit-cards/components/CreditCardItem'
@@ -22,7 +23,7 @@ export function CreditCardsPage() {
       <CreditCardForm isSubmitting={create.isPending} onSubmit={(data) => create.mutate(data)} />
 
       {isLoading ? (
-        <p className="text-center text-sm text-muted">Carregando cartões…</p>
+        <LoadingPanel rows={2} label="Carregando cartões" />
       ) : cards.length === 0 ? (
         <div className="panel p-8 text-center">
           <p className="text-sm text-muted">Nenhum cartão cadastrado. Adicione o primeiro acima.</p>
