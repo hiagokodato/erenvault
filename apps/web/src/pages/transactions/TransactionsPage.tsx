@@ -1,36 +1,56 @@
+import { Button } from '@erenvault/ui'
+import { Tags } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+import { MonthPicker } from '@/components/filters/MonthPicker'
 import { PageShell } from '@/components/layout/PageShell'
+import { Skeleton } from '@/components/skeleton/Skeleton'
 import { CsvImportPanel } from '@/features/csv-import/components/CsvImportPanel'
 import { TransactionForm } from '@/features/transactions/components/TransactionForm'
 import { TransactionList } from '@/features/transactions/components/TransactionList'
-import { Skeleton } from '@/components/skeleton/Skeleton'
 import { useAuth } from '@/features/auth/context/useAuth'
 import { useCategories } from '@/hooks/useCategories'
+import { useSelectedMonth } from '@/hooks/useSelectedMonth'
 import {
   computeMonthlySummary,
-  useRecentTransactions,
+  useMonthTransactions,
   useTransactionMutations,
 } from '@/hooks/useTransactions'
-import { formatCurrency, getCurrentMonthRange } from '@/utils/money'
+import { formatCurrency } from '@/utils/money'
 
 export function TransactionsPage() {
   const { user } = useAuth()
+  const { yearMonth, monthLabel, options, setYearMonth } = useSelectedMonth()
   const { data: categories = [], isLoading: categoriesLoading } = useCategories()
-  const { data: transactions = [], isLoading, monthLabel } = useRecentTransactions()
+  const { data: transactions = [], isLoading } = useMonthTransactions(yearMonth)
   const { create, remove, importCsv } = useTransactionMutations(user?.id)
 
-  const { from, to } = getCurrentMonthRange()
-  const monthTransactions = transactions.filter((t) => t.occurredOn >= from && t.occurredOn <= to)
-  const summary = computeMonthlySummary(monthTransactions)
+  const summary = computeMonthlySummary(transactions)
 
   return (
     <PageShell width="wide" className="space-y-8">
-      <header>
-        <p className="label-caps">Lançamentos</p>
-        <h1 className="font-display text-3xl font-semibold text-fg">Transações</h1>
-        <p className="mt-2 text-sm text-muted">
-          Resumo de <span className="capitalize">{monthLabel}</span> · lista com lançamentos
-          recentes
-        </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="label-caps">Lançamentos</p>
+          <h1 className="font-display text-3xl font-semibold text-fg">Transações</h1>
+          <p className="mt-2 text-sm text-muted capitalize">
+            Período: <span>{monthLabel}</span>
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+          <MonthPicker
+            id="transactions-month"
+            value={yearMonth}
+            options={options}
+            onChange={setYearMonth}
+          />
+          <Link to="/categorias">
+            <Button variant="ghost" size="sm" className="gap-2">
+              <Tags className="size-4" aria-hidden />
+              Categorias
+            </Button>
+          </Link>
+        </div>
       </header>
 
       <div className="grid gap-3 sm:grid-cols-3">
@@ -77,6 +97,10 @@ export function TransactionsPage() {
             </li>
           ))}
         </ul>
+      ) : transactions.length === 0 ? (
+        <div className="panel p-8 text-center">
+          <p className="text-sm text-muted">Nenhum lançamento neste período.</p>
+        </div>
       ) : (
         <TransactionList
           transactions={transactions}

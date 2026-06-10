@@ -1,3 +1,4 @@
+import { CATEGORY_COLOR_PRESETS } from '@/features/categories/categoryColors'
 import { getSupabase } from '@/lib/supabase'
 import type { Database } from '@/types/database'
 
@@ -10,14 +11,35 @@ export type Category = {
 }
 
 const DEFAULT_CATEGORIES: { name: string; color: string }[] = [
-  { name: 'Alimentação', color: '#f59e0b' },
-  { name: 'Moradia', color: '#a78bfa' },
-  { name: 'Transporte', color: '#38bdf8' },
-  { name: 'Lazer', color: '#f472b6' },
-  { name: 'Saúde', color: '#34d399' },
-  { name: 'Salário', color: '#4ade80' },
-  { name: 'Outros', color: '#94a3b8' },
+  { name: 'Alimentação', color: CATEGORY_COLOR_PRESETS[0] },
+  { name: 'Moradia', color: CATEGORY_COLOR_PRESETS[1] },
+  { name: 'Transporte', color: CATEGORY_COLOR_PRESETS[2] },
+  { name: 'Lazer', color: CATEGORY_COLOR_PRESETS[3] },
+  { name: 'Saúde', color: CATEGORY_COLOR_PRESETS[4] },
+  { name: 'Salário', color: CATEGORY_COLOR_PRESETS[5] },
+  { name: 'Outros', color: CATEGORY_COLOR_PRESETS[7] },
 ]
+
+export type CreateCategoryInput = {
+  userId: string
+  name: string
+  color: string | null
+}
+
+export type UpdateCategoryInput = {
+  id: string
+  name: string
+  color: string | null
+}
+
+export function mapCategoryError(error: unknown): string {
+  if (error && typeof error === 'object' && 'code' in error) {
+    const code = String((error as { code: string }).code)
+    if (code === '23505') return 'Já existe uma categoria com esse nome.'
+  }
+  if (error instanceof Error && error.message) return error.message
+  return 'Não foi possível salvar a categoria. Tente novamente.'
+}
 
 function mapCategory(row: CategoryRow): Category {
   return { id: row.id, name: row.name, color: row.color }
@@ -51,5 +73,52 @@ export async function ensureDefaultCategories(userId: string): Promise<void> {
   }))
 
   const { error } = await supabase.from('categories').insert(rows)
+  if (error) throw error
+}
+
+export async function createCategory(input: CreateCategoryInput): Promise<Category> {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase não configurado')
+
+  const name = input.name.trim()
+  if (!name) throw new Error('Informe o nome da categoria.')
+
+  const { data, error } = await supabase
+    .from('categories')
+    .insert({
+      user_id: input.userId,
+      name,
+      color: input.color,
+    })
+    .select('id, name, color')
+    .single()
+
+  if (error) throw error
+  return mapCategory(data as CategoryRow)
+}
+
+export async function updateCategory(input: UpdateCategoryInput): Promise<Category> {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase não configurado')
+
+  const name = input.name.trim()
+  if (!name) throw new Error('Informe o nome da categoria.')
+
+  const { data, error } = await supabase
+    .from('categories')
+    .update({ name, color: input.color })
+    .eq('id', input.id)
+    .select('id, name, color')
+    .single()
+
+  if (error) throw error
+  return mapCategory(data as CategoryRow)
+}
+
+export async function deleteCategory(id: string): Promise<void> {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase não configurado')
+
+  const { error } = await supabase.from('categories').delete().eq('id', id)
   if (error) throw error
 }

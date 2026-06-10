@@ -12,19 +12,44 @@ import {
 import type { ParsedCsvRow } from '@/features/csv-import/types'
 import { transactionKeys } from '@/features/transactions/queryKeys'
 import { useAuth } from '@/features/auth/context/useAuth'
-import { getCurrentMonthRange } from '@/utils/money'
+import { getCurrentMonthRange, getMonthRangeForYearMonth, getPreviousMonthRangeForYearMonth } from '@/utils/money'
 
-export function useMonthTransactions() {
+export function useMonthTransactions(yearMonth?: string) {
   const { user } = useAuth()
-  const { from, to, label } = getCurrentMonthRange()
+  const range = yearMonth ? getMonthRangeForYearMonth(yearMonth) : getCurrentMonthRange()
 
   const query = useQuery({
-    queryKey: transactionKeys.month(from, to),
+    queryKey: transactionKeys.month(range.from, range.to),
     enabled: Boolean(user?.id),
-    queryFn: () => fetchTransactionsForMonth(user!.id, from, to),
+    queryFn: () => fetchTransactionsForMonth(user!.id, range.from, range.to),
   })
 
-  return { ...query, from, to, monthLabel: label }
+  return {
+    ...query,
+    from: range.from,
+    to: range.to,
+    monthLabel: range.label,
+    yearMonth: range.yearMonth,
+  }
+}
+
+export function usePreviousMonthTransactions(yearMonth: string) {
+  const { user } = useAuth()
+  const range = getPreviousMonthRangeForYearMonth(yearMonth)
+
+  const query = useQuery({
+    queryKey: transactionKeys.month(range.from, range.to),
+    enabled: Boolean(user?.id),
+    queryFn: () => fetchTransactionsForMonth(user!.id, range.from, range.to),
+  })
+
+  return {
+    ...query,
+    from: range.from,
+    to: range.to,
+    monthLabel: range.label,
+    yearMonth: range.yearMonth,
+  }
 }
 
 export function useRecentTransactions() {
@@ -42,11 +67,9 @@ export function useRecentTransactions() {
 
 export function useTransactionMutations(userId: string | undefined) {
   const queryClient = useQueryClient()
-  const { from, to } = getCurrentMonthRange()
 
   const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: transactionKeys.month(from, to) })
-    queryClient.invalidateQueries({ queryKey: transactionKeys.recent() })
+    queryClient.invalidateQueries({ queryKey: transactionKeys.all })
   }
 
   const create = useMutation({

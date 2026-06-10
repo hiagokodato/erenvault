@@ -6,10 +6,13 @@ import {
   LogIn,
   LogOut,
   MoonStar,
+  PieChart,
   Receipt,
   Sparkles,
+  Tags,
   Sun,
   Target,
+  User,
 } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 
@@ -27,9 +30,12 @@ export function AppSidebar() {
     ? [
         { to: '/dashboard', label: 'Painel', icon: LayoutDashboard, end: false },
         { to: '/transacoes', label: 'Transações', icon: Receipt, end: false },
+        { to: '/categorias', label: 'Categorias', icon: Tags, end: false },
         { to: '/metas', label: 'Metas', icon: Target, end: false },
         { to: '/cartoes', label: 'Cartões', icon: CreditCard, end: false },
         { to: '/insights', label: 'Insights', icon: Sparkles, end: false },
+        { to: '/relatorios', label: 'Relatórios', icon: PieChart, end: false },
+        { to: '/conta', label: 'Conta', icon: User, end: false },
         { to: '/', label: 'Início', icon: Home, end: true },
       ]
     : [{ to: '/', label: 'Início', icon: Home, end: true }]
