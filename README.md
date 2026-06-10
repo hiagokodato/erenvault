@@ -68,7 +68,6 @@ Análise por regras no navegador (privacidade): [`docs/INSIGHTS.md`](./docs/INSI
 
 ## Scripts
 
-<<<<<<< develop
 ```bash
 npm run dev        # frontend
 npm run dev:api      # API NestJS (outro terminal)
@@ -79,8 +78,6 @@ npm run lint         # ESLint do web
 ```
 
 Não use `npm run build dev:api` — isso quebra o Vite. Use `build:api` ou `build:all`.
-=======
->>>>>>> main
 
 ## Licença
 
