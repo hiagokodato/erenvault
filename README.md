@@ -69,10 +69,15 @@ Análise por regras no navegador (privacidade): [`docs/INSIGHTS.md`](./docs/INSI
 ## Scripts
 
 ```bash
-npm run dev      # desenvolvimento
-npm run build    # build produção
-npm run lint     # ESLint
+npm run dev        # frontend
+npm run dev:api      # API NestJS (outro terminal)
+npm run build        # build só do web (Vercel)
+npm run build:api    # build só da API
+npm run build:all    # web + API
+npm run lint         # ESLint do web
 ```
+
+Não use `npm run build dev:api` — isso quebra o Vite. Use `build:api` ou `build:all`.
 
 ## Licença
 
