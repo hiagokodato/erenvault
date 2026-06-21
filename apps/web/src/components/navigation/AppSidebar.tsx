@@ -18,6 +18,7 @@ import { Link, NavLink } from 'react-router-dom'
 
 import { ErenLogo } from '@/components/brand/ErenLogo'
 import { useAuth } from '@/features/auth/context/useAuth'
+import { useMonthNavTo } from '@/hooks/useMonthNavTo'
 import { useThemeMode } from '@/hooks/useThemeMode'
 import { useThemeStore } from '@/stores/themeStore'
 
@@ -25,6 +26,7 @@ export function AppSidebar() {
   const mode = useThemeMode()
   const toggleTheme = useThemeStore((s) => s.toggle)
   const { session, signOut } = useAuth()
+  const { monthNavTo } = useMonthNavTo()
 
   const navItems = session
     ? [
@@ -43,7 +45,7 @@ export function AppSidebar() {
   return (
     <aside className="hidden w-[220px] shrink-0 flex-col border-r border-border/60 bg-surface lg:flex">
       <div className="flex h-full flex-col px-4 py-6">
-        <Link to={session ? '/dashboard' : '/'} className="mb-8 flex items-center gap-3 px-1">
+        <Link to={monthNavTo(session ? '/dashboard' : '/')} className="mb-8 flex items-center gap-3 px-1">
           <ErenLogo size="sm" />
           <div>
             <p className="font-display text-lg leading-none text-fg">ErenVault</p>
@@ -55,7 +57,7 @@ export function AppSidebar() {
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
-              to={to}
+              to={monthNavTo(to)}
               end={end}
               className={({ isActive }) =>
                 `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${

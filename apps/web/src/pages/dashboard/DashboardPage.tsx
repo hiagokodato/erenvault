@@ -9,29 +9,40 @@ import {
   TrendingUp,
   Wallet,
 } from 'lucide-react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
 import { SkeletonLine } from '@/components/skeleton/Skeleton'
 import { PageShell } from '@/components/layout/PageShell'
 import { InsightCard } from '@/features/insights/components/InsightCard'
+import { CategoryBudgetAlerts } from '@/features/categories/components/CategoryBudgetAlerts'
+import {
+  computeCategoryBudgetStatuses,
+  getBudgetAlerts,
+} from '@/features/categories/computeCategoryBudgets'
 import { computeCardsSummary, getCardUsagePercent } from '@/features/credit-cards/api/creditCards'
 import { computeGoalsSummary, getGoalProgress } from '@/features/goals/api/goals'
 import { useAuth } from '@/features/auth/context/useAuth'
+import { useCategories } from '@/hooks/useCategories'
 import { useCreditCards } from '@/hooks/useCreditCards'
+import { useMonthNavTo, useResolvedYearMonth } from '@/hooks/useMonthNavTo'
 import { useFinancialInsights } from '@/hooks/useFinancialInsights'
 import { useGoals } from '@/hooks/useGoals'
 import { useProfile } from '@/hooks/useProfile'
 import { computeMonthlySummary, useMonthTransactions } from '@/hooks/useTransactions'
-import { formatCurrency, getCurrentMonthRange } from '@/utils/money'
+import { formatCurrency, getMonthRangeForYearMonth } from '@/utils/money'
 
 export function DashboardPage() {
   const { user } = useAuth()
+  const { monthNavTo } = useMonthNavTo()
+  const yearMonth = useResolvedYearMonth()
+  const { label: monthLabel } = getMonthRangeForYearMonth(yearMonth)
   const { data: profile, isLoading: profileLoading } = useProfile()
-  const { data: transactions = [], isLoading: txLoading } = useMonthTransactions()
+  const { data: transactions = [], isLoading: txLoading } = useMonthTransactions(yearMonth)
+  const { data: categories = [] } = useCategories()
   const { data: goals = [], isLoading: goalsLoading } = useGoals()
   const { data: cards = [], isLoading: cardsLoading } = useCreditCards()
   const { insights, isLoading: insightsLoading } = useFinancialInsights()
-  const { label: monthLabel } = getCurrentMonthRange()
 
   const summary = computeMonthlySummary(transactions)
   const goalsSummary = computeGoalsSummary(goals)
@@ -47,6 +58,11 @@ export function DashboardPage() {
   const topGoals = goals.slice(0, 3)
   const topCards = cards.slice(0, 3)
   const topInsights = insights.slice(0, 2)
+
+  const budgetAlerts = useMemo(() => {
+    const statuses = computeCategoryBudgetStatuses(transactions, categories)
+    return getBudgetAlerts(statuses)
+  }, [transactions, categories])
 
   return (
     <PageShell width="wide" className="space-y-8">
@@ -65,7 +81,7 @@ export function DashboardPage() {
               <Sparkles className="size-5 text-primary" aria-hidden />
               <h2 className="font-display text-lg font-semibold text-fg">Conselhos do Eren</h2>
             </div>
-            <Link to="/insights">
+            <Link to={monthNavTo('/insights')}>
               <Button variant="ghost" size="sm" className="gap-2">
                 Ver todos
                 <ArrowRight className="size-4" />
@@ -82,6 +98,10 @@ export function DashboardPage() {
             </ul>
           )}
         </section>
+      )}
+
+      {!txLoading && budgetAlerts.length > 0 && (
+        <CategoryBudgetAlerts alerts={budgetAlerts} monthLabel={monthLabel} />
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -135,7 +155,7 @@ export function DashboardPage() {
             <p className="text-sm text-muted">Gastos e entradas por categoria neste mês.</p>
           </div>
         </div>
-        <Link to="/relatorios">
+        <Link to={monthNavTo('/relatorios')}>
           <Button variant="primary" size="sm" className="gap-2 rounded-lg">
             Ver relatórios
             <ArrowRight className="size-4" />
@@ -147,7 +167,7 @@ export function DashboardPage() {
         <section className="panel p-6">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-display text-lg font-semibold text-fg">Cartões</h2>
-            <Link to="/cartoes">
+            <Link to={monthNavTo('/cartoes')}>
               <Button variant="ghost" size="sm" className="gap-2">
                 Ver todos
                 <ArrowRight className="size-4" />
@@ -188,7 +208,7 @@ export function DashboardPage() {
         <section className="panel p-6">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-display text-lg font-semibold text-fg">Suas metas</h2>
-            <Link to="/metas">
+            <Link to={monthNavTo('/metas')}>
               <Button variant="ghost" size="sm" className="gap-2">
                 Ver todas
                 <ArrowRight className="size-4" />
@@ -220,7 +240,7 @@ export function DashboardPage() {
       <section className="panel p-6">
         <div className="flex items-center justify-between gap-4">
           <h2 className="font-display text-lg font-semibold text-fg">Últimos lançamentos</h2>
-          <Link to="/transacoes">
+          <Link to={monthNavTo('/transacoes')}>
             <Button variant="ghost" size="sm" className="gap-2">
               Ver todos
               <ArrowRight className="size-4" />
@@ -241,7 +261,7 @@ export function DashboardPage() {
           <div className="mt-6 text-center">
             <Receipt className="mx-auto size-10 text-muted/50" aria-hidden />
             <p className="mt-3 text-sm text-muted">Nenhum lançamento ainda neste mês.</p>
-            <Link to="/transacoes" className="mt-4 inline-block">
+            <Link to={monthNavTo('/transacoes')} className="mt-4 inline-block">
               <Button variant="primary" size="sm" className="rounded-lg">
                 Registrar primeiro lançamento
               </Button>

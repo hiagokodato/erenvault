@@ -18,7 +18,8 @@ No painel Supabase → **SQL Editor** → executar:
 `supabase/migrations/20250526000000_initial.sql`  
 `supabase/migrations/20250526100000_goals.sql` (metas)  
 `supabase/migrations/20250526200000_credit_cards.sql` (cartões)  
-`supabase/migrations/20250526300000_categories_unique.sql` (índice único em categorias)
+`supabase/migrations/20250526300000_categories_unique.sql` (índice único em categorias)  
+`supabase/migrations/20250526400000_category_monthly_budget.sql` (orçamento mensal por categoria)
 
 Se já existirem categorias duplicadas, deduplique antes de rodar a última migration.
 
@@ -34,8 +35,8 @@ Para cadastro sem e-mail de confirmação (recomendado para família no início)
 
 **Authentication → URL Configuration**:
 
-- **Site URL**: URL da Vercel em produção (ex. `https://seu-app.vercel.app`)
-- **Redirect URLs**: adicionar `http://localhost:5173/**` e `https://seu-app.vercel.app/**`
+- **Site URL**: `https://erenvault.vercel.app`
+- **Redirect URLs**: `http://localhost:5173/**` e `https://erenvault.vercel.app/**`
 
 ## 5. Testar
 

@@ -11,9 +11,11 @@ import {
 import { NavLink } from 'react-router-dom'
 
 import { useAuth } from '@/features/auth/context/useAuth'
+import { useMonthNavTo } from '@/hooks/useMonthNavTo'
 
 export function AppBottomNav() {
   const { session, signOut } = useAuth()
+  const { monthNavTo } = useMonthNavTo()
 
   const items = session
     ? [
@@ -37,7 +39,7 @@ export function AppBottomNav() {
         {items.map(({ to, label, icon: Icon, end }) => (
           <li key={to} className="flex-1">
             <NavLink
-              to={to}
+              to={monthNavTo(to)}
               end={end}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-1 py-3 text-[10px] font-medium uppercase tracking-wider transition ${

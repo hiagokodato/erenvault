@@ -8,6 +8,7 @@ export type Category = {
   id: string
   name: string
   color: string | null
+  monthlyBudgetCents: number | null
 }
 
 const DEFAULT_CATEGORIES: { name: string; color: string }[] = [
@@ -24,12 +25,14 @@ export type CreateCategoryInput = {
   userId: string
   name: string
   color: string | null
+  monthlyBudgetCents: number | null
 }
 
 export type UpdateCategoryInput = {
   id: string
   name: string
   color: string | null
+  monthlyBudgetCents: number | null
 }
 
 export function mapCategoryError(error: unknown): string {
@@ -42,7 +45,12 @@ export function mapCategoryError(error: unknown): string {
 }
 
 function mapCategory(row: CategoryRow): Category {
-  return { id: row.id, name: row.name, color: row.color }
+  return {
+    id: row.id,
+    name: row.name,
+    color: row.color,
+    monthlyBudgetCents: row.monthly_budget_cents,
+  }
 }
 
 export async function fetchCategories(userId: string): Promise<Category[]> {
@@ -51,7 +59,7 @@ export async function fetchCategories(userId: string): Promise<Category[]> {
 
   const { data, error } = await supabase
     .from('categories')
-    .select('id, name, color')
+    .select('id, name, color, monthly_budget_cents')
     .eq('user_id', userId)
     .order('name')
 
@@ -89,8 +97,9 @@ export async function createCategory(input: CreateCategoryInput): Promise<Catego
       user_id: input.userId,
       name,
       color: input.color,
+      monthly_budget_cents: input.monthlyBudgetCents,
     })
-    .select('id, name, color')
+    .select('id, name, color, monthly_budget_cents')
     .single()
 
   if (error) throw error
@@ -106,9 +115,13 @@ export async function updateCategory(input: UpdateCategoryInput): Promise<Catego
 
   const { data, error } = await supabase
     .from('categories')
-    .update({ name, color: input.color })
+    .update({
+      name,
+      color: input.color,
+      monthly_budget_cents: input.monthlyBudgetCents,
+    })
     .eq('id', input.id)
-    .select('id, name, color')
+    .select('id, name, color, monthly_budget_cents')
     .single()
 
   if (error) throw error

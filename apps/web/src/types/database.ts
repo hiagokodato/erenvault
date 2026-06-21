@@ -34,6 +34,7 @@ export type Database = {
           user_id: string
           name: string
           color: string | null
+          monthly_budget_cents: number | null
           created_at: string
         }
         Insert: {
@@ -41,11 +42,13 @@ export type Database = {
           user_id: string
           name: string
           color?: string | null
+          monthly_budget_cents?: number | null
           created_at?: string
         }
         Update: {
           name?: string
           color?: string | null
+          monthly_budget_cents?: number | null
         }
       }
       transactions: {

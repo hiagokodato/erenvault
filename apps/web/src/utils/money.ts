@@ -2,6 +2,11 @@ export function formatCurrency(cents: number): string {
   return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
+/** Valor em centavos → string para input (ex.: `1234,56`). */
+export function formatCentsToBrlInput(cents: number): string {
+  return (cents / 100).toFixed(2).replace('.', ',')
+}
+
 /** Converte "1.234,56" ou "1234.56" para centavos. */
 export function parseBrlToCents(value: string): number | null {
   const cleaned = value.trim().replace(/[^\d,.-]/g, '')
