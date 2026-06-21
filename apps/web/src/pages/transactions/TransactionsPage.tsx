@@ -11,6 +11,7 @@ import { TransactionList } from '@/features/transactions/components/TransactionL
 import { useAuth } from '@/features/auth/context/useAuth'
 import { useCategories } from '@/hooks/useCategories'
 import { useSelectedMonth } from '@/hooks/useSelectedMonth'
+import { useMonthNavTo } from '@/hooks/useMonthNavTo'
 import {
   computeMonthlySummary,
   useMonthTransactions,
@@ -21,9 +22,10 @@ import { formatCurrency } from '@/utils/money'
 export function TransactionsPage() {
   const { user } = useAuth()
   const { yearMonth, monthLabel, options, setYearMonth } = useSelectedMonth()
+  const { monthNavTo } = useMonthNavTo()
   const { data: categories = [], isLoading: categoriesLoading } = useCategories()
   const { data: transactions = [], isLoading } = useMonthTransactions(yearMonth)
-  const { create, remove, importCsv } = useTransactionMutations(user?.id)
+  const { create, update, remove, importCsv } = useTransactionMutations(user?.id)
 
   const summary = computeMonthlySummary(transactions)
 
@@ -44,7 +46,7 @@ export function TransactionsPage() {
             options={options}
             onChange={setYearMonth}
           />
-          <Link to="/categorias">
+          <Link to={monthNavTo('/categorias')}>
             <Button variant="ghost" size="sm" className="gap-2">
               <Tags className="size-4" aria-hidden />
               Categorias
@@ -106,7 +108,9 @@ export function TransactionsPage() {
           transactions={transactions}
           categories={categories}
           isDeletingId={remove.isPending ? (remove.variables ?? null) : null}
+          isUpdatingId={update.isPending ? (update.variables?.id ?? null) : null}
           onDelete={(id) => remove.mutate(id)}
+          onUpdate={(id, data, onDone) => update.mutate({ id, ...data }, { onSuccess: onDone })}
         />
       )}
     </PageShell>

@@ -3,16 +3,22 @@ import { type FormEvent, useState } from 'react'
 
 import { CATEGORY_COLOR_PRESETS } from '@/features/categories/categoryColors'
 import { ColorSwatches } from '@/features/categories/components/ColorSwatches'
+import { parseMonthlyBudgetInput } from '@/features/categories/parseBudget'
 
 type CategoryFormProps = {
   isSubmitting: boolean
   serverError?: string | null
-  onSubmit: (data: { name: string; color: string | null }) => void
+  onSubmit: (data: {
+    name: string
+    color: string | null
+    monthlyBudgetCents: number | null
+  }) => void
 }
 
 export function CategoryForm({ isSubmitting, serverError, onSubmit }: CategoryFormProps) {
   const [name, setName] = useState('')
   const [color, setColor] = useState<string>(CATEGORY_COLOR_PRESETS[0])
+  const [budget, setBudget] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   function handleSubmit(e: FormEvent) {
@@ -25,9 +31,15 @@ export function CategoryForm({ isSubmitting, serverError, onSubmit }: CategoryFo
       return
     }
 
-    onSubmit({ name: trimmed, color })
-    setName('')
-    setColor(CATEGORY_COLOR_PRESETS[0])
+    try {
+      const monthlyBudgetCents = parseMonthlyBudgetInput(budget)
+      onSubmit({ name: trimmed, color, monthlyBudgetCents })
+      setName('')
+      setColor(CATEGORY_COLOR_PRESETS[0])
+      setBudget('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Orçamento inválido.')
+    }
   }
 
   const message = error ?? serverError
@@ -45,6 +57,18 @@ export function CategoryForm({ isSubmitting, serverError, onSubmit }: CategoryFo
           onChange={(e) => setName(e.target.value)}
           className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm"
           maxLength={40}
+        />
+      </label>
+
+      <label className="block space-y-2">
+        <span className="label-caps">Orçamento mensal (R$)</span>
+        <input
+          type="text"
+          inputMode="decimal"
+          placeholder="Opcional — ex.: 500,00"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+          className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm"
         />
       </label>
 

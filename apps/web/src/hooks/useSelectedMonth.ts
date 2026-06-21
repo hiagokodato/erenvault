@@ -6,15 +6,14 @@ import {
   getCurrentMonthRange,
   getMonthRangeForYearMonth,
 } from '@/utils/money'
-
-const PARAM = 'mes'
+import { MONTH_QUERY_PARAM, parseYearMonthParam } from '@/utils/monthQuery'
 
 export function useSelectedMonth() {
   const [searchParams, setSearchParams] = useSearchParams()
   const current = getCurrentMonthRange()
 
-  const raw = searchParams.get(PARAM)
-  const yearMonth = raw && /^\d{4}-\d{2}$/.test(raw) ? raw : current.yearMonth
+  const raw = searchParams.get(MONTH_QUERY_PARAM)
+  const yearMonth = parseYearMonthParam(raw) ?? current.yearMonth
 
   const range = useMemo(() => getMonthRangeForYearMonth(yearMonth), [yearMonth])
   const options = useMemo(() => buildMonthPickerOptions(24), [])
@@ -23,8 +22,8 @@ export function useSelectedMonth() {
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev)
-        if (value === current.yearMonth) next.delete(PARAM)
-        else next.set(PARAM, value)
+        if (value === current.yearMonth) next.delete(MONTH_QUERY_PARAM)
+        else next.set(MONTH_QUERY_PARAM, value)
         return next
       },
       { replace: true },

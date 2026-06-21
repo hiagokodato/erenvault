@@ -4,10 +4,12 @@ import {
   createTransaction,
   createTransactionsBulk,
   deleteTransaction,
+  updateTransaction,
   fetchRecentTransactions,
   fetchTransactionsForMonth,
   computeMonthlySummary,
   type CreateTransactionInput,
+  type UpdateTransactionInput,
 } from '@/features/transactions/api/transactions'
 import type { ParsedCsvRow } from '@/features/csv-import/types'
 import { transactionKeys } from '@/features/transactions/queryKeys'
@@ -85,6 +87,11 @@ export function useTransactionMutations(userId: string | undefined) {
     onSuccess: invalidate,
   })
 
+  const update = useMutation({
+    mutationFn: (input: UpdateTransactionInput) => updateTransaction(input),
+    onSuccess: invalidate,
+  })
+
   const importCsv = useMutation({
     mutationFn: (rows: ParsedCsvRow[]) => {
       if (!userId) throw new Error('Usuário não autenticado')
@@ -101,7 +108,7 @@ export function useTransactionMutations(userId: string | undefined) {
     onSuccess: invalidate,
   })
 
-  return { create, remove, importCsv }
+  return { create, update, remove, importCsv }
 }
 
 export { computeMonthlySummary }

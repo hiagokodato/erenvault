@@ -4,13 +4,21 @@ Plataforma SaaS de **gestão financeira pessoal**, em homenagem ao gato preto **
 
 **Autor:** Hiago Henrique Kodato
 
+**Demo ao vivo:** [https://erenvault.vercel.app](https://erenvault.vercel.app/)
+
+## Preview
+
+Acesse a [demo em produção](https://erenvault.vercel.app/) — cadastro, login e todas as rotas do app (painel, transações, categorias, metas, cartões, relatórios, insights e conta).
+
+Screenshots para o README podem ser salvas em [`docs/screenshots/`](./docs/screenshots/) (`dashboard.png`, `transacoes.png`, `insights.png`).
+
 ## Funcionalidades
 
 | Módulo | Descrição |
 |--------|-----------|
 | **Auth** | Cadastro, login, sessão persistente, rotas protegidas |
-| **Transações** | CRUD com filtro por mês (`?mes=AAAA-MM`), resumo do período |
-| **Categorias** | Criar, editar e excluir categorias com cor (`/categorias`) |
+| **Transações** | CRUD com filtro por mês (`?mes=AAAA-MM`), criar, **editar** e excluir |
+| **Categorias** | Criar, editar e excluir categorias com cor e **orçamento mensal** (`/categorias`) |
 | **CSV** | Importação de extratos (`Data`, `Descrição`, `Valor`) |
 | **Metas** | Objetivos com barra de progresso e prazo |
 | **Cartões** | Limite, fatura atual, dias de fechamento/vencimento |

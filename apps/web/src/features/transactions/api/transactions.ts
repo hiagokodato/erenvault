@@ -68,6 +68,36 @@ export async function createTransaction(input: CreateTransactionInput): Promise<
   return mapTransaction(data as TransactionRow)
 }
 
+export type UpdateTransactionInput = {
+  id: string
+  type: TransactionType
+  amountCents: number
+  description: string
+  categoryId: string | null
+  occurredOn: string
+}
+
+export async function updateTransaction(input: UpdateTransactionInput): Promise<Transaction> {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase não configurado')
+
+  const { data, error } = await supabase
+    .from('transactions')
+    .update({
+      type: input.type,
+      amount_cents: input.amountCents,
+      description: input.description,
+      category_id: input.categoryId,
+      occurred_on: input.occurredOn,
+    })
+    .eq('id', input.id)
+    .select('*')
+    .single()
+
+  if (error) throw error
+  return mapTransaction(data as TransactionRow)
+}
+
 export async function deleteTransaction(id: string): Promise<void> {
   const supabase = getSupabase()
   if (!supabase) throw new Error('Supabase não configurado')
