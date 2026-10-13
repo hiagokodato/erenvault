@@ -100,6 +100,7 @@ export function TransactionForm({ categories, isSubmitting, onSubmit }: Transact
         <input
           type="text"
           placeholder="Ex.: Mercado, aluguel, salário"
+          maxLength={200}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"

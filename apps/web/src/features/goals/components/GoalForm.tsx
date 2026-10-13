@@ -49,6 +49,7 @@ export function GoalForm({ isSubmitting, onSubmit }: GoalFormProps) {
         <input
           type="text"
           placeholder="Ex.: Viagem, reserva de emergência"
+          maxLength={80}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm"

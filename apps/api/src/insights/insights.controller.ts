@@ -3,6 +3,7 @@ import type { User } from '@supabase/supabase-js'
 
 import { AccessToken, AuthUser } from '../auth/auth-user.decorator'
 import { SupabaseAuthGuard } from '../auth/supabase-auth.guard'
+import { InsightsRateLimitGuard } from './insights-rate-limit.guard'
 import { InsightsService } from './insights.service'
 
 @Controller()
@@ -19,6 +20,7 @@ export class InsightsController {
   }
 
   @Post('insights/enhance')
+  @UseGuards(InsightsRateLimitGuard)
   enhance(@AccessToken() accessToken: string) {
     return this.insights.enhance(accessToken)
   }

@@ -6,6 +6,9 @@ import { parseBankCsv } from '@/features/csv-import/parseCsv'
 import type { ParsedCsvRow } from '@/features/csv-import/types'
 import { formatCurrency } from '@/utils/money'
 
+/** Extratos bancários reais ficam bem abaixo disso; evita travar o navegador com arquivos enormes. */
+const MAX_CSV_BYTES = 2_000_000
+
 type CsvImportPanelProps = {
   isImporting: boolean
   onImport: (rows: ParsedCsvRow[]) => void
@@ -20,6 +23,20 @@ export function CsvImportPanel({ isImporting, onImport }: CsvImportPanelProps) {
 
   function handleFileChange(file: File | undefined) {
     if (!file) return
+
+    // O atributo accept só filtra o seletor de arquivos; aqui a checagem é de fato.
+    const problem = !file.name.toLowerCase().endsWith('.csv')
+      ? 'Selecione um arquivo .csv.'
+      : file.size > MAX_CSV_BYTES
+        ? 'Arquivo muito grande (máximo de 2 MB).'
+        : null
+    if (problem) {
+      setPreview([])
+      setErrors([problem])
+      setSkipped(0)
+      setFileName(null)
+      return
+    }
 
     const reader = new FileReader()
     reader.onload = () => {

@@ -65,6 +65,7 @@ export function CreditCardForm({ isSubmitting, onSubmit }: CreditCardFormProps) 
         <input
           type="text"
           placeholder="Ex.: Nubank, Inter"
+          maxLength={60}
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm"

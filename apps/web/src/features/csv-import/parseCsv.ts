@@ -144,7 +144,7 @@ export function parseBankCsv(text: string): CsvParseResult {
 
     const occurredOn = parseDate(dateRaw)
     const signedCents = parseAmountCents(amountRaw)
-    const description = descRaw.trim()
+    const description = descRaw.trim().slice(0, 200)
 
     if (!occurredOn || signedCents === null || signedCents === 0 || !description) {
       skipped++
